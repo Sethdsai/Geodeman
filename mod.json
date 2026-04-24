@@ -1,0 +1,65 @@
+{
+    "geode": "4.0.1",
+    "gd": {
+        "win": "2.2074",
+        "mac": "2.2074",
+        "android": "2.2074",
+        "ios": "2.2074"
+    },
+    "version": "v1.0.0",
+    "id": "pathfinder.ueker.geode",
+    "name": "Pathfinder",
+    "developer": "ueker",
+    "description": "A pathfinding bot that learns, generates fun levels in every mode, and beats most of what you throw at it.",
+    "tags": [
+        "gameplay",
+        "editor",
+        "utilities",
+        "enhancement"
+    ],
+    "resources": {
+        "files": [
+            "resources/logo.png",
+            "resources/pathfinder-btn.png",
+            "resources/pathfinder-banner.png"
+        ],
+        "sprites": [
+            "resources/pathfinder-btn.png"
+        ]
+    },
+    "settings": {
+        "bot-enabled": {
+            "type": "bool",
+            "default": false,
+            "name": "Enable Pathfinder Bot",
+            "description": "Lets the bot take over and play the level for you."
+        },
+        "learning-enabled": {
+            "type": "bool",
+            "default": true,
+            "name": "Online Learning",
+            "description": "Refines the policy from death frames in the current session."
+        },
+        "generator-difficulty": {
+            "type": "int",
+            "default": 5,
+            "min": 1,
+            "max": 10,
+            "name": "Generator Difficulty",
+            "description": "How spicy generated levels should be (1 = chill, 10 = demon)."
+        },
+        "generator-mode-mix": {
+            "type": "string",
+            "default": "all",
+            "one-of": ["cube", "ship", "ball", "ufo", "wave", "robot", "spider", "swing", "all"],
+            "name": "Generator Mode Mix",
+            "description": "Which gamemodes the level generator is allowed to use."
+        },
+        "show-path-overlay": {
+            "type": "bool",
+            "default": true,
+            "name": "Show Planned Path",
+            "description": "Draws the planned path on top of the level while the bot plays."
+        }
+    }
+}
