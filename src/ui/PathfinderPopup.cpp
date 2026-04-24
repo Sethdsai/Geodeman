@@ -88,7 +88,7 @@ void PathfinderPopup::onGenerateLevel(CCObject*) {
 }
 
 void PathfinderPopup::onOpenSettings(CCObject*) {
-    geode::openSettingsPopup(Mod::get());
+    geode::ModSettingsPopup::create(Mod::get())->show();
 }
 
 PathfinderPopup* PathfinderPopup::create() {
