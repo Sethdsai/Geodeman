@@ -5,7 +5,9 @@
 
 using namespace geode::prelude;
 
-class $modify(MenuLayer) {
+// Use named $modify so we can reference MyMenuLayer in menu_selector.
+// This matches the official Geode example-mod pattern.
+class $modify(MyMenuLayer, MenuLayer) {
     bool init() {
         if (!MenuLayer::init()) return false;
 
@@ -15,7 +17,7 @@ class $modify(MenuLayer) {
 
         auto btn = CCMenuItemSpriteExtra::create(
             sprite, this,
-            menu_selector(MenuLayer::onMoreGames)
+            menu_selector(MyMenuLayer::onPathfinderHub)
         );
         btn->setID("pathfinder-button"_spr);
 
@@ -30,19 +32,6 @@ class $modify(MenuLayer) {
             this->addChild(fallback);
         }
         return true;
-    }
-
-    // Intercept onMoreGames to check if the pathfinder button was pressed.
-    // This avoids needing to set m_pfnSelector (protected member) or use
-    // menu_selector on a method that doesn't exist in the original class.
-    void onMoreGames(CCObject* sender) {
-        if (auto btn = typeinfo_cast<CCMenuItemSpriteExtra*>(sender)) {
-            if (btn->getID() == "pathfinder-button"_spr) {
-                onPathfinderHub(sender);
-                return;
-            }
-        }
-        MenuLayer::onMoreGames(sender);
     }
 
     void onPathfinderHub(CCObject*) {

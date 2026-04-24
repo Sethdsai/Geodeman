@@ -24,20 +24,22 @@ bool PathfinderPopup::setup() {
     auto menu = CCMenu::create();
     menu->setPosition({ winSize.width / 2.0f, winSize.height / 2.0f - 30.0f });
 
-    auto botSpr = ButtonSprite::create("Toggle Bot", "GJ_button_01.png", "bigFont.fnt");
+    // IconButtonSprite is Geode's own button class with confirmed API:
+    // create(bgSpriteName, icon, text, font)
+    auto botSpr = IconButtonSprite::create("GJ_button_01.png", nullptr, "Toggle Bot", "bigFont.fnt");
     botSpr->setScale(0.7f);
     auto botBtn = CCMenuItemSpriteExtra::create(
         botSpr, this, menu_selector(PathfinderPopup::onToggleBot));
     botBtn->setPositionY(40.0f);
     menu->addChild(botBtn);
 
-    auto genSpr = ButtonSprite::create("Generate Level", "GJ_button_02.png", "bigFont.fnt");
+    auto genSpr = IconButtonSprite::create("GJ_button_02.png", nullptr, "Generate Level", "bigFont.fnt");
     genSpr->setScale(0.7f);
     auto genBtn = CCMenuItemSpriteExtra::create(
         genSpr, this, menu_selector(PathfinderPopup::onGenerateLevel));
     menu->addChild(genBtn);
 
-    auto setSpr = ButtonSprite::create("Settings", "GJ_button_04.png", "bigFont.fnt");
+    auto setSpr = IconButtonSprite::create("GJ_button_04.png", nullptr, "Settings", "bigFont.fnt");
     setSpr->setScale(0.7f);
     auto setBtn = CCMenuItemSpriteExtra::create(
         setSpr, this, menu_selector(PathfinderPopup::onOpenSettings));

@@ -26,7 +26,7 @@ thread_local std::vector<pathfinder::Action>       s_actTrail;
 
 } // namespace
 
-class $modify(PlayLayer) {
+class $modify(MyPlayLayer, PlayLayer) {
     void postUpdate(float dt) {
         PlayLayer::postUpdate(dt);
 

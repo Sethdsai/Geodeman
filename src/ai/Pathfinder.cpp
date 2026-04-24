@@ -1,7 +1,6 @@
 #include "Pathfinder.hpp"
 
 #include <Geode/Geode.hpp>
-#include <Geode/loader/Mod.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -130,7 +129,7 @@ Action Pathfinder::chooseAction(PlayerState const& s,
             auto nextState = PhysicsModel::step(node.state, act, 0.0f, 480.0f);
 
             // Rough collision check against the obstacle silhouette ahead.
-            int slot = std::min<int>(node.depth, heightsAhead.size() - 1);
+            int slot = std::min<int>(node.depth, static_cast<int>(heightsAhead.size()) - 1);
             float ground = (slot >= 0) ? heightsAhead[slot] : 0.0f;
             float addCost = (nextState.y < ground) ? kCollisionPenalty : 0.0f;
 
