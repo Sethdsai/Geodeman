@@ -27,6 +27,83 @@ thread_local std::vector<pathfinder::Action>       s_actTrail;
 } // namespace
 
 class $modify(MyPlayLayer, PlayLayer) {
+    CCMenu* m_botMenu = nullptr;
+    CCMenuItemToggler* m_botToggle = nullptr;
+    bool m_botButtonReady = false;
+
+    void onBotToggle(CCObject* sender) {
+        auto mod = Mod::get();
+        bool current = mod->getSettingValue<bool>("bot-enabled");
+        mod->setSettingValue<bool>("bot-enabled", !current);
+
+        if (m_botToggle) {
+            m_botToggle->setToggle(!current);
+        }
+
+        Notification::create(!current ? "Bot enabled" : "Bot disabled",
+                             NotificationIcon::Info)->show();
+    }
+
+    void addBotToggleButton() {
+        if (m_botButtonReady) return;
+
+        auto winSize = CCDirector::sharedDirector()->getWinSize();
+
+        // Create toggle button - small checkbox like other GD game buttons
+        auto toggleOnSpr = CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
+        auto toggleOffSpr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
+
+        if (!toggleOnSpr || !toggleOffSpr) {
+            log::warn("Bot toggle sprites not found");
+            return;
+        }
+
+        m_botToggle = CCMenuItemToggler::create(
+            toggleOffSpr,
+            toggleOnSpr,
+            this,
+            menu_selector(MyPlayLayer::onBotToggle)
+        );
+
+        // Scale to match typical GD button size for touch-friendly interaction
+        m_botToggle->setScale(0.55f);
+        m_botToggle->setID("bot-toggle-btn"_spr);
+
+        bool botEnabled = Mod::get()->getSettingValue<bool>("bot-enabled");
+        m_botToggle->setToggle(botEnabled);
+
+        // Create menu positioned near bottom-right, to the LEFT of practice mode
+        // This places the button right next to practice mode button
+        m_botMenu = CCMenu::create();
+        m_botMenu->addChild(m_botToggle);
+        m_botMenu->setPosition({ winSize.width - 85.0f, 28.0f }); // 28 pts from bottom
+        m_botMenu->setID("bot-toggle-menu"_spr);
+
+        this->addChild(m_botMenu);
+        m_botButtonReady = true;
+    }
+
+    void resetBotButton() {
+        m_botButtonReady = false;
+        if (m_botMenu) {
+            m_botMenu->removeFromParentAndCleanup(true);
+            m_botMenu = nullptr;
+        }
+        m_botToggle = nullptr;
+        addBotToggleButton();
+    }
+
+    void postInit() {
+        PlayLayer::postInit();
+
+        // Delay to ensure UI is fully set up
+        this->scheduleOnce(schedule_selector(MyPlayLayer::delayedInit), 0.15f);
+    }
+
+    void delayedInit(float) {
+        addBotToggleButton();
+    }
+
     void postUpdate(float dt) {
         PlayLayer::postUpdate(dt);
 
@@ -81,5 +158,17 @@ class $modify(MyPlayLayer, PlayLayer) {
         s_keyTrail.clear();
         s_actTrail.clear();
         PlayLayer::destroyPlayer(p, o);
+    }
+
+    // Reset button when resuming from practice mode
+    void resume() {
+        PlayLayer::resume();
+        resetBotButton();
+    }
+
+    // Reset button on level restart
+    void onExit() override {
+        PlayLayer::onExit();
+        m_botButtonReady = false;
     }
 };
