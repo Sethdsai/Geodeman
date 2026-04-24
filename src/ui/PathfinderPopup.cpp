@@ -2,6 +2,7 @@
 #include "../ai/LevelGenerator.hpp"
 
 #include <Geode/Geode.hpp>
+#include <Geode/ui/GeodeUI.hpp>
 
 #include <random>
 
@@ -88,7 +89,7 @@ void PathfinderPopup::onGenerateLevel(CCObject*) {
 }
 
 void PathfinderPopup::onOpenSettings(CCObject*) {
-    geode::ModSettingsPopup::create(Mod::get())->show();
+    geode::openSettingsPopup(Mod::get());
 }
 
 PathfinderPopup* PathfinderPopup::create() {
